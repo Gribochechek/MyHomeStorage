@@ -74,7 +74,7 @@ public class GroupDeleteWindow extends JDialog {
 
 		for (int i = 0; i < Main.mainWindow.items.size();) {
 			if (Main.mainWindow.items.get(i).getGroupID() == tempGroupID) {
-				Main.mainWindow.deletedItems.add(Main.mainWindow.items.get(i));
+				
 				Main.mainWindow.items.remove(i);
 			} else
 				i++;

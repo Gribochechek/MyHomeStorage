@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
@@ -27,6 +28,7 @@ import javax.swing.table.AbstractTableModel;
 import input_output.GroupListReader;
 import input_output.InstrumentListReader;
 import listeners.ListenerForButton;
+import listeners.ListenerForRadioButton;
 import objects_For_Items.Instrument;
 import objects_For_Items.ItemGroup;
 import tableModels.TableModelInstruments;
@@ -55,9 +57,9 @@ public class MainWindow extends JFrame {
 
 	public ArrayList<Instrument> items = new ArrayList<Instrument>();
 	public ArrayList<ItemGroup> groupsList = new ArrayList<ItemGroup>();
-	public ArrayList<Instrument> deletedItems = new ArrayList<Instrument>();
 
 	ListenerForButton aListener = new ListenerForButton();
+	ListenerForRadioButton rdbt_listener = new ListenerForRadioButton();
 
 	private JScrollPane jsp_itemTable;
 	private JLabel lblGroup;
@@ -70,16 +72,14 @@ public class MainWindow extends JFrame {
 	public JButton btnDeleteItem;
 	public JButton btnSearch;
 
-	private GroupListReader grr;
+	public JRadioButton rdbtnShowAllItems;
+	public JRadioButton rdbtnShowItemsFromGroup;
 
+	private GroupListReader grr = new GroupListReader();
 	private InstrumentListReader ilr = new InstrumentListReader();
 
 	public File groupstxt = new File("data/groupList.txt");
 	public File instrumentstxt = new File("data/instrumentList.txt");
-
-	public JRadioButton rdbtnShowAllItems;
-
-	public JRadioButton rdbtnShowItemsFromGroup;
 
 	/*
 	 * private JPanel mainPanel = new JPanel(); private JPanel title = new JPanel();
@@ -112,7 +112,6 @@ public class MainWindow extends JFrame {
 		getContentPane().add(title_panel);
 
 		if (groupstxt.exists() && groupstxt.length() > 5) {
-			grr = new GroupListReader();
 			groupsList = grr.getGroupsList();
 		}
 		if (instrumentstxt.exists() && instrumentstxt.length() > 5) {
@@ -183,10 +182,16 @@ public class MainWindow extends JFrame {
 
 		rdbtnShowAllItems = new JRadioButton("show all items");
 		rdbtnShowAllItems.setHorizontalAlignment(SwingConstants.LEFT);
+		rdbtnShowAllItems.addActionListener(rdbt_listener);
 		panel.add(rdbtnShowAllItems);
 
 		rdbtnShowItemsFromGroup = new JRadioButton("show items from group");
+		rdbtnShowItemsFromGroup.addActionListener(rdbt_listener);
 		panel.add(rdbtnShowItemsFromGroup);
+
+		ButtonGroup bg1 = new ButtonGroup();
+		bg1.add(rdbtnShowAllItems);
+		bg1.add(rdbtnShowItemsFromGroup);
 
 		lblGroup = new JLabel("Group:");
 		lblGroup.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -195,6 +200,7 @@ public class MainWindow extends JFrame {
 		cb_Group_name = new JComboBox();
 		String[] string = getGroupsNames();
 		cb_Group_name.setModel(new DefaultComboBoxModel(string));
+		cb_Group_name.addActionListener(rdbt_listener);
 		panel.add(cb_Group_name);
 
 		allItems.add("Parts", pSecondTab);

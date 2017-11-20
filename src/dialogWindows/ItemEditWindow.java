@@ -193,7 +193,7 @@ public class ItemEditWindow extends JDialog {
 		tf_StoragePlace.setColumns(10);
 		tf_StoragePlace.setBounds(146, 244, 184, 24);
 		getContentPane().add(tf_StoragePlace);
-		
+
 		comboBoxGroup.setSelectedIndex(editingItem.getGroupID() - 1);
 
 		tf_Name.setText(editingItem.getName());
@@ -210,16 +210,17 @@ public class ItemEditWindow extends JDialog {
 	private void setResult() {
 		String temp_itemName = tf_Name.getText().trim();
 
-		/*if (!old_item_name.equals(temp_itemName.toLowerCase())) {
-			for (Instrument it : Main.mainWindow.items) {
-				if (it.getName().toLowerCase().equals(temp_itemName.toLowerCase())) {
-					JOptionPane.showMessageDialog(null, "Such entry already exists!");
-					return;
-				}
-			}
-		}*/
+		/*
+		 * if (!old_item_name.equals(temp_itemName.toLowerCase())) { for (Instrument it
+		 * : Main.mainWindow.items) { if
+		 * (it.getName().toLowerCase().equals(temp_itemName.toLowerCase())) {
+		 * JOptionPane.showMessageDialog(null, "Such entry already exists!"); return; }
+		 * } }
+		 */
 
-		editingItem = new Instrument(editingItem.getInstrumentID(), editingItem.getGroupID(), tf_Name.getText().trim(),
+		int newGroupId = Main.mainWindow.groupsList.get(comboBoxGroup.getSelectedIndex()).getGroupID();
+
+		editingItem = new Instrument(editingItem.getInstrumentID(), newGroupId, tf_Name.getText().trim(),
 				tf_Desc.getText().trim(), tf_Maker.getText().trim(), tf_Unit.getText().trim(),
 				Double.parseDouble(tf_Quantity.getText().trim()), tf_StoragePlace.getText().trim());
 		Main.mainWindow.items.remove(indexOfTempGoodInList);

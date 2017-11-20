@@ -32,6 +32,7 @@ public class ListenerForRadioButton implements ActionListener {
 				}
 				TableModelInstruments tempGoodsModel = new TableModelInstruments(tempGoods);
 				Main.mainWindow.itemsTable.setModel(tempGoodsModel);
+				Main.mainWindow.itemsTable.updateUI();
 			}
 		}
 
