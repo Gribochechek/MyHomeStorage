@@ -31,6 +31,8 @@ import objects_For_Items.Instrument;
 import objects_For_Items.ItemGroup;
 import tableModels.TableModelInstruments;
 import javax.swing.SpringLayout;
+import javax.swing.JScrollBar;
+import javax.swing.ScrollPaneConstants;
 
 public class MainWindow extends JFrame {
 
@@ -59,7 +61,7 @@ public class MainWindow extends JFrame {
 
 	private JScrollPane jsp_itemTable;
 	private JLabel lblGroup;
-	private JComboBox cb_Group_name;
+	public JComboBox cb_Group_name;
 	public JButton btnAddGroup;
 	public JButton btnEditGroup;
 	public JButton btnDeleteGroup;
@@ -77,8 +79,7 @@ public class MainWindow extends JFrame {
 
 	public JRadioButton rdbtnShowAllItems;
 
-	public JRadioButton rdbtnShowItemsFrom;
-	
+	public JRadioButton rdbtnShowItemsFromGroup;
 
 	/*
 	 * private JPanel mainPanel = new JPanel(); private JPanel title = new JPanel();
@@ -126,7 +127,7 @@ public class MainWindow extends JFrame {
 		itemsTable.setAutoCreateRowSorter(true);
 		itemsTable.getTableHeader().setReorderingAllowed(true);
 		itemsTable.setUpdateSelectionOnSort(true);
-		
+
 		pFirstTab.setLayout(new BorderLayout());
 		jsp_itemTable = new JScrollPane(itemsTable);
 		pFirstTab.add(jsp_itemTable, BorderLayout.CENTER);
@@ -184,8 +185,8 @@ public class MainWindow extends JFrame {
 		rdbtnShowAllItems.setHorizontalAlignment(SwingConstants.LEFT);
 		panel.add(rdbtnShowAllItems);
 
-		rdbtnShowItemsFrom = new JRadioButton("show items from group");
-		panel.add(rdbtnShowItemsFrom);
+		rdbtnShowItemsFromGroup = new JRadioButton("show items from group");
+		panel.add(rdbtnShowItemsFromGroup);
 
 		lblGroup = new JLabel("Group:");
 		lblGroup.setFont(new Font("Tahoma", Font.PLAIN, 16));
