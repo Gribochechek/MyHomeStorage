@@ -131,8 +131,8 @@ public class ItemEditWindow extends JDialog {
 				}
 				try {
 				    desktop.open(editingItem.getItemImage());
-				} catch (IOException ioe) {
-				    ioe.printStackTrace();
+				} catch (NullPointerException  | IOException ioe) {
+				    JOptionPane.showMessageDialog(null, "There is no Image attached!");
 				}
 				
 			}

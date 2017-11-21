@@ -87,7 +87,7 @@ public class SearchResult extends JDialog {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int idOfFoundItem = (int) Main.mainWindow.itemsTable.getValueAt(foundItemsTable.getSelectedRow(), 0);
+				int idOfFoundItem = (int)foundItemsTable.getValueAt(foundItemsTable.getSelectedRow(), 0);
 
 				int rawIndex = 0;
 
