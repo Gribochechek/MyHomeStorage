@@ -79,7 +79,7 @@ public class MainWindow extends JFrame {
 	private InstrumentListReader ilr = new InstrumentListReader();
 
 	public File groupstxt = new File("data/groupList.txt");
-	public File instrumentstxt = new File("data/instrumentList.txt");
+	public File instrumentstxt = new File("data/instrumentList.dat");
 
 	/*
 	 * private JPanel mainPanel = new JPanel(); private JPanel title = new JPanel();

@@ -1,6 +1,9 @@
 package objects_For_Items;
 
-public class Instrument {
+import java.io.File;
+import java.io.Serializable;
+
+public class Instrument  implements Serializable{
 
 	private int instrumentID;
 	private int groupID;
@@ -10,11 +13,12 @@ public class Instrument {
 	private String unit; // Одиниці вимірювання товарів (кг., шт., од., і тд.)
 	private double quantity;
 	private String storagePlace;
+	private File itemImage;
 
 	private static int uniqueID = 1;
 
 	public Instrument(int instrumentID, int groupID, String name, String description, String maker, String unit,
-			double quantity, String storagePlace) {
+			double quantity, String storagePlace, File itemImage) {
 		this.instrumentID = instrumentID;
 		this.groupID = groupID;
 		this.name = name;
@@ -23,17 +27,7 @@ public class Instrument {
 		this.unit = unit;
 		this.quantity = quantity;
 		this.storagePlace = storagePlace;
-	}
-
-	public Instrument(int instrumentID, int groupID, String name, String maker, String unit, double quantity,
-			String storagePlace) {
-		this.instrumentID = instrumentID;
-		this.groupID = groupID;
-		this.name = name;
-		this.maker = maker;
-		this.unit = unit;
-		this.quantity = quantity;
-		this.storagePlace = storagePlace;
+		this.itemImage = itemImage;
 	}
 
 	public int getInstrumentID() {
@@ -100,12 +94,18 @@ public class Instrument {
 		this.storagePlace = storagePlace;
 	}
 
-	@Override
-	public String toString() {
-		return instrumentID + ";"+ groupID + ";" + name + ";"
-				+ description + ";" + maker + ";" + unit + ";" + quantity + ";"
-				+ storagePlace+";\n";
+	public File getItemImage() {
+		return itemImage;
 	}
 
-	
+	public void setItemImage(File itemImage) {
+		this.itemImage = itemImage;
+	}
+
+	@Override
+	public String toString() {
+		return instrumentID + ";" + groupID + ";" + name + ";" + description + ";" + maker + ";" + unit + ";" + quantity
+				+ ";" + storagePlace + ";\n";
+	}
+
 }

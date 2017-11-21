@@ -1,11 +1,17 @@
 package dialogWindows;
 
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -33,6 +39,8 @@ public class ItemAddWindow extends JDialog {
 	protected JTextField tf_StoragePlace;
 	JButton btnOk;
 	JButton btnCancel;
+	JButton btnAddImage;
+	JButton btnShowPic;
 
 	private JLabel lblGroup;
 	public JComboBox comboBoxGroup;
@@ -44,6 +52,8 @@ public class ItemAddWindow extends JDialog {
 	eHandler available_handler = new eHandler();
 
 	private Instrument item;
+	File itemImage;
+	File itemImageSaving;
 
 	InstrumentListWriter ilr = new InstrumentListWriter();
 
@@ -55,7 +65,7 @@ public class ItemAddWindow extends JDialog {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
 		setLocation(parent.getWidth() - getWidth() / 2, 200);
-		setSize(370, 365);
+		setSize(370, 400);
 		setResizable(false);
 
 		jp_titlePanel = new JPanel();
@@ -71,12 +81,12 @@ public class ItemAddWindow extends JDialog {
 		getContentPane().add(jp_fieldPanel);
 
 		btnOk = new JButton("OK");
-		btnOk.setBounds(47, 295, 97, 25);
+		btnOk.setBounds(48, 327, 97, 25);
 		getContentPane().add(btnOk);
 		btnOk.addActionListener(available_handler);
 
 		btnCancel = new JButton("Cancel");
-		btnCancel.setBounds(219, 295, 97, 25);
+		btnCancel.setBounds(220, 327, 97, 25);
 		getContentPane().add(btnCancel);
 		btnCancel.addActionListener(available_handler);
 
@@ -159,9 +169,21 @@ public class ItemAddWindow extends JDialog {
 		tf_StoragePlace.setBounds(146, 244, 184, 24);
 		getContentPane().add(tf_StoragePlace);
 
+		btnAddImage = new JButton("Add Image");
+		btnAddImage.setBounds(48, 281, 97, 25);
+		btnAddImage.addActionListener(available_handler);
+		getContentPane().add(btnAddImage);
+
+		btnShowPic = new JButton("Show Pic");
+		btnShowPic.setBounds(220, 277, 97, 25);
+		btnShowPic.addActionListener(available_handler);
+		getContentPane().add(btnShowPic);
+
 	}
 
 	public class eHandler implements ActionListener {
+
+		
 
 		public void actionPerformed(ActionEvent e) {
 
@@ -192,48 +214,79 @@ public class ItemAddWindow extends JDialog {
 				dispose();
 			}
 
-			/*
-			 * else if (e.getSource() == comboBoxGroup) { String[] string =
-			 * Main.mainWindow.getGroupsNames(); comboBoxGroup.setModel(new
-			 * DefaultComboBoxModel(string)); }
-			 */
-		}
+			if (e.getSource() == btnAddImage) {
+				JFileChooser fileopen = new JFileChooser();
+				int ret = fileopen.showDialog(null, "Открыть файл");
+				if (ret == JFileChooser.APPROVE_OPTION) {
+					itemImage = fileopen.getSelectedFile();
+					try {
+						BufferedImage input = ImageIO.read(itemImage);
+						itemImageSaving = new File("images/" + tf_Name.getText().trim() + ".jpg");
+						ImageIO.write(input, "JPG", itemImageSaving);
 
-	}
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 
-	private void setResult() {
-		String temp_str = tf_Name.getText().trim();
-		for (int i = 0; i < Main.mainWindow.items.size(); i++) {
-			Instrument goods = Main.mainWindow.items.get(i);
-			String str2 = goods.getName();
-			if (temp_str.toLowerCase().equals(str2.toLowerCase())) {
-				JOptionPane.showMessageDialog(null, "Such entry already exists!");
-				Main.mainWindow.itemsTable.setRowSelectionInterval(i, i); // highlight the row with the same name
-				return;
+				}
+
+				/*
+				 * else if (e.getSource() == comboBoxGroup) { String[] string =
+				 * Main.mainWindow.getGroupsNames(); comboBoxGroup.setModel(new
+				 * DefaultComboBoxModel(string)); }
+				 */
 			}
-		}
-
-		int idOfNewProduct = 0;
-		if (Main.mainWindow.items.size() == 0)
-			idOfNewProduct = 1;
-		else {
-			for (Instrument g : Main.mainWindow.items) {
-				if (g.getInstrumentID() > idOfNewProduct)
-					idOfNewProduct = g.getInstrumentID();
+			
+			
+			if(e.getSource()==btnShowPic) {
+				Desktop desktop = null;
+				if (Desktop.isDesktopSupported()) {
+				    desktop = Desktop.getDesktop();
+				}
+				try {
+				    desktop.open(itemImageSaving);
+				} catch (IOException ioe) {
+				    ioe.printStackTrace();
+				}
 			}
-			idOfNewProduct++;
+
 		}
 
-		String quantity = tf_Quantity.getText().trim();
+		private void setResult() {
+			String temp_str = tf_Name.getText().trim();
+			for (int i = 0; i < Main.mainWindow.items.size(); i++) {
+				Instrument goods = Main.mainWindow.items.get(i);
+				String str2 = goods.getName();
+				if (temp_str.toLowerCase().equals(str2.toLowerCase())) {
+					JOptionPane.showMessageDialog(null, "Such entry already exists!");
+					Main.mainWindow.itemsTable.setRowSelectionInterval(i, i); // highlight the row with the same name
+					return;
+				}
+			}
 
-		int groupID = Main.mainWindow.groupsList.get(comboBoxGroup.getSelectedIndex()).getGroupID();
+			int idOfNewProduct = 0;
+			if (Main.mainWindow.items.size() == 0)
+				idOfNewProduct = 1;
+			else {
+				for (Instrument g : Main.mainWindow.items) {
+					if (g.getInstrumentID() > idOfNewProduct)
+						idOfNewProduct = g.getInstrumentID();
+				}
+				idOfNewProduct++;
+			}
 
-		item = new Instrument(idOfNewProduct, groupID, tf_Name.getText().trim(), tf_Desc.getText().trim(),
-				tf_Maker.getText().trim(), tf_Unit.getText().trim(), Double.parseDouble(quantity),
-				tf_StoragePlace.getText().trim());
+			String quantity = tf_Quantity.getText().trim();
 
-		Main.mainWindow.items.add(item);
-		ilr.saveGoodsInFile(Main.mainWindow.items);
+			int groupID = Main.mainWindow.groupsList.get(comboBoxGroup.getSelectedIndex()).getGroupID();
 
+			item = new Instrument(idOfNewProduct, groupID, tf_Name.getText().trim(), tf_Desc.getText().trim(),
+					tf_Maker.getText().trim(), tf_Unit.getText().trim(), Double.parseDouble(quantity),
+					tf_StoragePlace.getText().trim(), itemImageSaving);
+
+			Main.mainWindow.items.add(item);
+			ilr.saveGoodsInFile(Main.mainWindow.items);
+
+		}
 	}
 }

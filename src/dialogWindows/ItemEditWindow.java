@@ -1,9 +1,11 @@
 package dialogWindows;
 
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -43,6 +45,7 @@ public class ItemEditWindow extends JDialog {
 	InstrumentListWriter ilw = new InstrumentListWriter();
 	private int indexOfTempGoodInList;
 	private String old_item_name;
+	private JButton btnShowPic;
 
 	public ItemEditWindow(Frame parent, int id) {
 		super(parent, true);
@@ -58,7 +61,7 @@ public class ItemEditWindow extends JDialog {
 		}
 
 		setLocation(parent.getWidth() - getWidth() / 2, 200);
-		setSize(370, 365);
+		setSize(370, 400);
 		setResizable(false);
 
 		jp_titlePanel = new JPanel();
@@ -74,7 +77,7 @@ public class ItemEditWindow extends JDialog {
 		getContentPane().add(jp_fieldPanel);
 
 		btnOk = new JButton("OK");
-		btnOk.setBounds(47, 295, 97, 25);
+		btnOk.setBounds(48, 327, 97, 25);
 		getContentPane().add(btnOk);
 		btnOk.addActionListener(new ActionListener() {
 
@@ -104,7 +107,7 @@ public class ItemEditWindow extends JDialog {
 		});
 
 		btnCancel = new JButton("Cancel");
-		btnCancel.setBounds(219, 295, 97, 25);
+		btnCancel.setBounds(220, 327, 97, 25);
 		getContentPane().add(btnCancel);
 		btnCancel.addActionListener(new ActionListener() {
 
@@ -114,6 +117,27 @@ public class ItemEditWindow extends JDialog {
 
 			}
 		});
+		
+		btnShowPic = new JButton("Show Pic");
+		btnShowPic.setBounds(48, 281, 97, 25);
+		getContentPane().add(btnShowPic);
+		btnShowPic.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Desktop desktop = null;
+				if (Desktop.isDesktopSupported()) {
+				    desktop = Desktop.getDesktop();
+				}
+				try {
+				    desktop.open(editingItem.getItemImage());
+				} catch (IOException ioe) {
+				    ioe.printStackTrace();
+				}
+				
+			}
+		});
+		
 
 		lblGroup = new JLabel("Group");
 		lblGroup.setHorizontalAlignment(SwingConstants.LEFT);
@@ -222,7 +246,7 @@ public class ItemEditWindow extends JDialog {
 
 		editingItem = new Instrument(editingItem.getInstrumentID(), newGroupId, tf_Name.getText().trim(),
 				tf_Desc.getText().trim(), tf_Maker.getText().trim(), tf_Unit.getText().trim(),
-				Double.parseDouble(tf_Quantity.getText().trim()), tf_StoragePlace.getText().trim());
+				Double.parseDouble(tf_Quantity.getText().trim()), tf_StoragePlace.getText().trim(), editingItem.getItemImage());
 		Main.mainWindow.items.remove(indexOfTempGoodInList);
 		Main.mainWindow.items.add(indexOfTempGoodInList, editingItem);
 
