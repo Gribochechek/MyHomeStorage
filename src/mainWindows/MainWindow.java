@@ -75,18 +75,12 @@ public class MainWindow extends JFrame {
 	public JRadioButton rdbtnShowAllItems;
 	public JRadioButton rdbtnShowItemsFromGroup;
 
+	
+	
 	private GroupListReader grr = new GroupListReader();
 	private InstrumentListReader ilr = new InstrumentListReader();
 
-	public File groupstxt = new File("data/groupList.txt");
-	public File instrumentstxt = new File("data/instrumentList.dat");
-
-	/*
-	 * private JPanel mainPanel = new JPanel(); private JPanel title = new JPanel();
-	 * private JTabbedPane goodsAll = new JTabbedPane(); private JPanel pFirstTab =
-	 * new JPanel(); private JPanel pSecondTab = new JPanel();
-	 */
-	public MainWindow(String s) throws IOException {
+	public MainWindow(String s, File imagesSavingFolder, File groupstxt, File instrumentsdat) throws IOException {
 		super(s);
 
 		setBounds(width / 2 - windowWidth / 2, height / 2 - windowHeight / 2, windowWidth, windowHeight);
@@ -111,10 +105,10 @@ public class MainWindow extends JFrame {
 		title_panel.add(title);
 		getContentPane().add(title_panel);
 
-		if (groupstxt.exists() && groupstxt.length() > 5) {
+		if (groupstxt.exists() && groupstxt.length() > 2) {
 			groupsList = grr.getGroupsList();
 		}
-		if (instrumentstxt.exists() && instrumentstxt.length() > 5) {
+		if (instrumentsdat.exists() && instrumentsdat.length() > 2) {
 
 			items = ilr.getProductsList();
 		}

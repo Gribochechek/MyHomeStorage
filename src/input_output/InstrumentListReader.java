@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
+import main.Main;
 import objects_For_Items.Instrument;
 
 public class InstrumentListReader {
@@ -12,7 +13,7 @@ public class InstrumentListReader {
 	public ArrayList<Instrument> getProductsList() throws IOException {
 		
 		ArrayList<Instrument> items= new ArrayList<>();
-		FileInputStream fin = new FileInputStream("data/instrumentList.dat");
+		FileInputStream fin = new FileInputStream(Main.instrumentsdat);
 		ObjectInputStream ois = new ObjectInputStream(fin);
 		try {
 			 items = (ArrayList<Instrument>)ois.readObject();

@@ -11,7 +11,7 @@ import objects_For_Items.ItemGroup;
 public class GroupListWriter {
 	public void saveGroupsInFile(ArrayList<ItemGroup> groups) {
 		try {
-			FileWriter writer = new FileWriter(Main.mainWindow.groupstxt);
+			FileWriter writer = new FileWriter(Main.groupstxt);
 			BufferedWriter bufferWriter = new BufferedWriter(writer);
 			String s;
 			for (int i = 0; i < groups.size(); i++) {

@@ -12,7 +12,7 @@ public class GroupListReader {
 
 	public ArrayList<ItemGroup> getGroupsList() throws IOException {
 		ArrayList<ItemGroup> groups = new ArrayList<ItemGroup>();
-		FileReader fr = new FileReader("data/groupList.txt");
+		FileReader fr = new FileReader(Main.groupstxt);
 		BufferedReader br = new BufferedReader(fr);
 		ItemGroup tempGroup;
 		String text;

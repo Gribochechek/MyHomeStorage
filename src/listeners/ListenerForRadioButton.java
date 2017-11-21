@@ -20,7 +20,7 @@ public class ListenerForRadioButton implements ActionListener {
 
 		if (Main.mainWindow.rdbtnShowItemsFromGroup.isSelected() | e.getSource() == Main.mainWindow.cb_Group_name) {
 			Main.mainWindow.rdbtnShowItemsFromGroup.setSelected(true);
-			if (Main.mainWindow.groupstxt.exists() && Main.mainWindow.groupstxt.length() > 5) {
+			if (Main.groupstxt.exists() && Main.groupstxt.length() > 5) {
 				int index = Main.mainWindow.cb_Group_name.getSelectedIndex();
 				int groupID = Main.mainWindow.groupsList.get(index).getGroupID();
 

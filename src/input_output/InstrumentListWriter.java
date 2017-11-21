@@ -18,7 +18,7 @@ public class InstrumentListWriter {
 	public void saveGoodsInFile(ArrayList<Instrument> items) {
 
 		try {
-			FileOutputStream fout = new FileOutputStream("data/instrumentList.dat");
+			FileOutputStream fout = new FileOutputStream(Main.instrumentsdat);
 			ObjectOutputStream oos = new ObjectOutputStream(fout);
 
 			oos.writeObject(items);

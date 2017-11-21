@@ -221,7 +221,7 @@ public class ItemAddWindow extends JDialog {
 					itemImage = fileopen.getSelectedFile();
 					try {
 						BufferedImage input = ImageIO.read(itemImage);
-						itemImageSaving = new File("images/" + tf_Name.getText().trim() + ".jpg");
+						itemImageSaving = new File(Main.imageSaveFolder +"/"+tf_Name.getText().trim() + ".jpg");
 						ImageIO.write(input, "JPG", itemImageSaving);
 
 					} catch (IOException e1) {
