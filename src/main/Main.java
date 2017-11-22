@@ -4,32 +4,24 @@ import java.io.File;
 import java.io.IOException;
 
 import dialogWindows.SetFoldersWindow;
+import input_output.WorkingFolders_RW;
 import mainWindows.LoginWindow;
 import mainWindows.MainWindow;
 
 public class Main {
 
-	
+	public static WorkingFolders_RW wfr = new WorkingFolders_RW();
 	public static SetFoldersWindow setFoldfWin;
-	public static File groupstxt;
-	public  static File instrumentsdat;
-	public static File imageSaveFolder;
+	public static File groupstxt = new File("data/groupList.txt");
+	public static File instrumentsdat = new File("data/instruments.dat");
+	public static File imageSaveFolder = new File("images/");
 	public static MainWindow mainWindow;
-	
 
 	public static void main(String[] args) throws IOException {
-		// LoginWindow stWin = new LoginWindow("Home Storage");
-		// stWin.setVisible(true);
-		
-			setFoldfWin = new SetFoldersWindow();
-			setFoldfWin.setVisible(true);
-		
-			//mainWindow = new MainWindow("Home Storage", imageSaveFolder, groupstxt, instrumentsdat);
-			//mainWindow.setVisible(true);
-		
-		
-		
-		
+
+		mainWindow = new MainWindow("Home Storage", imageSaveFolder, groupstxt, instrumentsdat);
+		mainWindow.setVisible(true);
+
 	}
 
 }

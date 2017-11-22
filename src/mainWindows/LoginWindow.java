@@ -100,7 +100,7 @@ public class LoginWindow extends JFrame {
 				if (userName.getText().equals("User")) {
 					if (checkPassword()) {
 						try {
-							Main.mainWindow = new MainWindow("Home Storage");
+							Main.mainWindow = new MainWindow("Home Storage", null, null, null);
 						} catch (IOException e1) {
 							e1.printStackTrace();
 						}

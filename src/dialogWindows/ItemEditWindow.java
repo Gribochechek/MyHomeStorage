@@ -249,6 +249,8 @@ public class ItemEditWindow extends JDialog {
 				Double.parseDouble(tf_Quantity.getText().trim()), tf_StoragePlace.getText().trim(), editingItem.getItemImage());
 		Main.mainWindow.items.remove(indexOfTempGoodInList);
 		Main.mainWindow.items.add(indexOfTempGoodInList, editingItem);
+		
+		Main.mainWindow.sql.updateGoods(editingItem);
 
 		ilw.saveGoodsInFile(Main.mainWindow.items);
 		Main.mainWindow.itemsTable.updateUI();

@@ -88,6 +88,8 @@ public class GroupDeleteWindow extends JDialog {
 		InstrumentListWriter ilw = new InstrumentListWriter();
 		ilw.saveGoodsInFile(Main.mainWindow.items);
 		
+		Main.mainWindow.sql.removeItem(1, tempGroupID);
+		
 	}
 
 	public class eHandler implements ActionListener {

@@ -120,6 +120,7 @@ public class GroupEditWindow extends JFrame {
 			Main.mainWindow.groupsList.remove(indexOfTempGroopInArrayList);
 			Main.mainWindow.groupsList.add(indexOfTempGroopInArrayList, tempGroup);
 			gw.saveGroupsInFile(Main.mainWindow.groupsList);
+			Main.mainWindow.sql.updateGroup(tempGroup.getGroupID(), tempGroup.getGroupName());
 		}
 
 	}

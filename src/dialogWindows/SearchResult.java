@@ -1,31 +1,25 @@
 package dialogWindows;
 
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListSelectionModel;
+import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.SpringLayout;
 import javax.swing.table.AbstractTableModel;
 
+import main.Main;
 import objects_For_Items.Instrument;
 import tableModels.TableModelInstruments;
-import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
-
-import main.Main;
-
-import javax.swing.JLabel;
-import javax.swing.SpringLayout;
-import javax.swing.JButton;
-import java.awt.Font;
 
 public class SearchResult extends JDialog {
 

@@ -99,6 +99,7 @@ public class GroupAddWindow extends JDialog {
 		}
 
 		Main.mainWindow.groupsList.add(group);
+		Main.mainWindow.sql.addGroup(group);
 		gw.saveGroupsInFile(Main.mainWindow.groupsList);
 		Main.mainWindow.refreshComboBoxes();
 

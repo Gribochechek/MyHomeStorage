@@ -22,19 +22,18 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 
 import input_output.GroupListReader;
 import input_output.InstrumentListReader;
+import input_output.SQL_operator;
 import listeners.ListenerForButton;
 import listeners.ListenerForRadioButton;
 import objects_For_Items.Instrument;
 import objects_For_Items.ItemGroup;
 import tableModels.TableModelInstruments;
-import javax.swing.SpringLayout;
-import javax.swing.JScrollBar;
-import javax.swing.ScrollPaneConstants;
 
 public class MainWindow extends JFrame {
 
@@ -55,8 +54,8 @@ public class MainWindow extends JFrame {
 	private JPanel title_panel;
 	private JLabel title;
 
-	public ArrayList<Instrument> items = new ArrayList<Instrument>();
-	public ArrayList<ItemGroup> groupsList = new ArrayList<ItemGroup>();
+	public ArrayList<Instrument> items ;
+	public ArrayList<ItemGroup> groupsList ;
 
 	ListenerForButton aListener = new ListenerForButton();
 	ListenerForRadioButton rdbt_listener = new ListenerForRadioButton();
@@ -75,7 +74,7 @@ public class MainWindow extends JFrame {
 	public JRadioButton rdbtnShowAllItems;
 	public JRadioButton rdbtnShowItemsFromGroup;
 
-	
+	public SQL_operator sql = new SQL_operator();
 	
 	private GroupListReader grr = new GroupListReader();
 	private InstrumentListReader ilr = new InstrumentListReader();
@@ -105,13 +104,18 @@ public class MainWindow extends JFrame {
 		title_panel.add(title);
 		getContentPane().add(title_panel);
 
-		if (groupstxt.exists() && groupstxt.length() > 2) {
+		/*if (groupstxt.exists() && groupstxt.length() > 2) {
 			groupsList = grr.getGroupsList();
 		}
 		if (instrumentsdat.exists() && instrumentsdat.length() > 2) {
 
 			items = ilr.getProductsList();
-		}
+		}*/
+		
+		items = new ArrayList<Instrument>();
+		groupsList = new ArrayList<ItemGroup>();
+		sql.db_initialization("Homestorage");
+		sql.initializeArrays(groupsList, items);
 
 		itemModel = new TableModelInstruments(items);
 		ListSelectionModel lm = new DefaultListSelectionModel();

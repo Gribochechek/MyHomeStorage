@@ -57,7 +57,7 @@ public class ItemRemovingWindow extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				int tempID;
+				int tempID = 0;
 				for (int i = 0; i < Main.mainWindow.items.size(); i++) {
 					tempID = Main.mainWindow.items.get(i).getInstrumentID();
 					if (tempID == id) {
@@ -67,6 +67,7 @@ public class ItemRemovingWindow extends JDialog {
 
 				InstrumentListWriter ilw = new InstrumentListWriter();
 				ilw.saveGoodsInFile(Main.mainWindow.items);
+				Main.mainWindow.sql.removeItem(2, tempID);
 
 				dispose();
 

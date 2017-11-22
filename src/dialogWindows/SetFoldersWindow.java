@@ -14,6 +14,9 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.swing.JPanel;
+
+import input_output.WorkingFolders_RW;
+
 import javax.swing.JLabel;
 
 import java.awt.Dimension;
@@ -65,8 +68,7 @@ public SetFoldersWindow() {
 				int ret = chooser.showDialog(null, "Choose folder for saving images");
 				if (ret == JFileChooser.APPROVE_OPTION) {
 					
-					Main.groupstxt = new File(chooser.getSelectedFile().getAbsolutePath()+ "/groupsList.txt");
-					Main.instrumentsdat= new File(chooser.getSelectedFile().getAbsolutePath()+ "/instruments.dat");
+					
 					label_Chosen_Folder.setText(Main.groupstxt.getParent());
 				}
 				
@@ -124,6 +126,11 @@ public SetFoldersWindow() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
+					WorkingFolders_RW frw = new WorkingFolders_RW();
+					frw.saveWorkingFolder(Main.groupstxt.getAbsolutePath());
+					frw.saveWorkingFolder(Main.instrumentsdat.getAbsolutePath());
+					frw.saveWorkingFolder(Main.imageSaveFolder.getAbsolutePath());
+					
 					Main.mainWindow = new MainWindow("Home Storage", Main.imageSaveFolder, Main.groupstxt, Main.instrumentsdat);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block

@@ -22,7 +22,7 @@ public class SQL_operator {
 			Class.forName("org.sqlite.JDBC");
 			con = DriverManager.getConnection("jdbc:sqlite:" + name);
 			PreparedStatement st = con.prepareStatement(
-					"create table if not exists 'items' ('ID' INT PRIMARY KEY, 'groupID' INT, 'name' text, 'description' text, 'maker' text, 'unit' text, 'quantity' real, 'storagePlace' text);");
+					"create table if not exists 'items' ('ID' INT PRIMARY KEY, 'groupID' INT, 'name' text, 'description' text, 'maker' text, 'unit' text, 'quantity' real, 'storagePlace' text, 'itemImage' text);");
 			int result = st.executeUpdate();
 
 			st = con.prepareStatement(
@@ -86,7 +86,7 @@ public class SQL_operator {
 		}
 	}
 
-	public void initializeArrays(ArrayList<ItemGroup> groups, ArrayList<Instrument> goods) {
+	public void initializeArrays(ArrayList<ItemGroup> groups, ArrayList<Instrument> items) {
 		try {
 			Statement st = con.createStatement();
 			ResultSet res = st.executeQuery("SELECT * FROM groups");
@@ -95,12 +95,13 @@ public class SQL_operator {
 				groups.add(new ItemGroup(res.getInt("groupID"), res.getString("groupName")));
 			}
 
-			res = st.executeQuery("SELECT * FROM goods");
+			res = st.executeQuery("SELECT * FROM items");
 
 			while (res.next()) {
-				goods.add(new Instrument(res.getShort("ID"), res.getShort("groupID"), res.getString("name"),
+				File itemimage = new File(res.getString("itemImage"));
+				items.add(new Instrument(res.getShort("ID"), res.getShort("groupID"), res.getString("name"),
 						res.getString("description"), res.getString("maker"), res.getString("unit"),
-						res.getDouble("quantity"), res.getString("storagePlace"), (File) res.getObject("itemImage")));
+						res.getDouble("quantity"), res.getString("storagePlace"), itemimage));
 
 			}
 
@@ -132,7 +133,7 @@ public class SQL_operator {
 
 		try {
 			PreparedStatement statement = con.prepareStatement(
-					"INSERT INTO items(ID, groupID, name, description, maker, unit, quantity, storagePlace, itemImage) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+					"INSERT INTO items(ID, groupID, name, description, maker, unit, quantity, storagePlace, itemImage) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			statement.setInt(1, g.getInstrumentID());
 			statement.setInt(2, g.getGroupID());
 			statement.setString(3, g.getName());
@@ -209,17 +210,15 @@ public class SQL_operator {
 		}
 	}
 
-	public void updateGoods(Instrument g){
-		try{
+	public void updateGoods(Instrument g) {
+		try {
 			Statement st = con.createStatement();
-			st.execute("update 'goods' set groupID='" + g.getGroupID() + "', name='" + g.getName() + 
-					"', description='" + g.getDescription() + "', maker='" + g.getMaker() + 
-					"', unit='" + g.getUnit() + "', quantity='" + g.getQuantity() + 
-					"', storagePlace='" + g.getStoragePlace() + "', itemImage='" + g.getItemImage() + "' where id = " + g.getInstrumentID() + ";");
-			
-			
-			
-		}catch (SQLException e){
+			st.execute("update 'goods' set groupID='" + g.getGroupID() + "', name='" + g.getName() + "', description='"
+					+ g.getDescription() + "', maker='" + g.getMaker() + "', unit='" + g.getUnit() + "', quantity='"
+					+ g.getQuantity() + "', storagePlace='" + g.getStoragePlace() + "', itemImage='" + g.getItemImage()
+					+ "' where id = " + g.getInstrumentID() + ";");
+
+		} catch (SQLException e) {
 			System.out.println("Не вірний SQL запит на оновлення інформації про товар");
 			e.printStackTrace();
 		}
