@@ -9,6 +9,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import objects_For_Items.AutomotiveParts_Make;
+import objects_For_Items.AutomotiveParts_Model;
+import objects_For_Items.AutomotiveParts_Part;
 import objects_For_Items.Instrument;
 import objects_For_Items.ItemGroup;
 
@@ -27,6 +30,18 @@ public class SQL_operator {
 
 			st = con.prepareStatement(
 					"create table if not exists 'groups' ('groupID' INT PRIMARY KEY, 'groupName' text);");
+			result = st.executeUpdate();
+
+			st = con.prepareStatement(
+					"create table if not exists 'makes' ('makeID' INT PRIMARY KEY, 'makeName' text);");
+			result = st.executeUpdate();
+
+			st = con.prepareStatement(
+					"create table if not exists 'models' ('modelID' INT PRIMARY KEY, 'makeID' INT, 'modelName' text);");
+			result = st.executeUpdate();
+
+			st = con.prepareStatement(
+					"create table if not exists 'parts' ('partID' INT PRIMARY KEY, 'makeID' INT, 'modelID' INT, 'partName' text, 'catlogID' text, 'description' text, 'side' text, 'maker' text, 'quantity' real, 'storagePlace' text, 'itemImage' text);");
 			result = st.executeUpdate();
 
 		} catch (ClassNotFoundException e) {
@@ -86,7 +101,9 @@ public class SQL_operator {
 		}
 	}
 
-	public void initializeArrays(ArrayList<ItemGroup> groups, ArrayList<Instrument> items) {
+	public void initializeArrays(ArrayList<ItemGroup> groups, ArrayList<Instrument> items,
+			ArrayList<AutomotiveParts_Make> makes, ArrayList<AutomotiveParts_Model> models,
+			ArrayList<AutomotiveParts_Part> parts) {
 		try {
 			Statement st = con.createStatement();
 			ResultSet res = st.executeQuery("SELECT * FROM groups");
@@ -102,6 +119,31 @@ public class SQL_operator {
 				items.add(new Instrument(res.getShort("ID"), res.getShort("groupID"), res.getString("name"),
 						res.getString("description"), res.getString("maker"), res.getString("unit"),
 						res.getDouble("quantity"), res.getString("storagePlace"), itemimage));
+
+			}
+
+			res = st.executeQuery("SELECT * FROM makes");
+
+			while (res.next()) {
+				makes.add(new AutomotiveParts_Make(res.getInt("makeID"), res.getString("makeName")));
+
+			}
+
+			res = st.executeQuery("SELECT * FROM models");
+
+			while (res.next()) {
+				models.add(new AutomotiveParts_Model(res.getInt("modelID"), res.getInt("makeID"),
+						res.getString("modelNAme")));
+			}
+
+			res = st.executeQuery("SELECT * FROM parts");
+
+			while (res.next()) {
+				File partimage = new File(res.getString("itemImage"));
+				parts.add(new AutomotiveParts_Part(res.getInt("partID"), res.getInt("makeID"), res.getInt("modelID"),
+						res.getString("partName"), res.getString("catlogID"), res.getString("description"),
+						res.getString("side"), res.getString("maker"), res.getString("quantity"),
+						res.getString("storagePlace"), partimage));
 
 			}
 
@@ -129,7 +171,7 @@ public class SQL_operator {
 		}
 	}
 
-	public void addGoods(Instrument g) {
+	public void addInstrument(Instrument g)  {
 
 		try {
 			PreparedStatement statement = con.prepareStatement(
@@ -151,9 +193,67 @@ public class SQL_operator {
 		}
 	}
 
+	public void addMake(AutomotiveParts_Make make) {
+
+		try {
+			PreparedStatement statement = con.prepareStatement("INSERT INTO makes(makeID, makeName) VALUES (?,?)");
+			statement.setInt(1, make.getMakeID());
+			statement.setString(2, make.getMakeName());
+			int result = statement.executeUpdate();
+			statement.close();
+
+		} catch (SQLException e) {
+			System.out.println("Не вірний SQL запит на вставку товару");
+			e.printStackTrace();
+
+		}
+
+	}
+
+	public void addModel(AutomotiveParts_Model model) {
+
+		try {
+			PreparedStatement statement = con.prepareStatement("INSERT INTO models(modelID, makeID, modelName) VALUES(?,?,?)");
+			statement.setInt(1, model.getModelID());
+			statement.setInt(2, model.getMakeID());
+			statement.setString(3, model.getModelName());
+			int result = statement.executeUpdate();
+			statement.close();
+		} catch (SQLException e) {
+			System.out.println("Не вірний SQL запит на вставку товару");
+			e.printStackTrace();
+		}
+
+	}
+
+	public void addPart(AutomotiveParts_Part part) {
+		try {
+			PreparedStatement statement = con.prepareStatement(
+					"INSERT INTO parts(partID, makeID, modelID, partName, catlogID, description, side, maker, quantity, storagePlace, itemImage) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			statement.setInt(1, part.getPartID());
+			statement.setInt(2, part.getMakeID());
+			statement.setInt(3, part.getModelID());
+			statement.setString(4, part.getPartName());
+			statement.setString(5, part.getCatlogID());
+			statement.setString(6, part.getDescription());
+			statement.setString(7, part.getSide());
+			statement.setString(8, part.getMaker());
+			statement.setString(9, part.getQuantity());
+			statement.setString(10, part.getStoragePlace());
+			statement.setObject(11, part.getPartImage());
+			int result = statement.executeUpdate();
+			statement.close();
+
+		} catch (SQLException e) {
+			System.out.println("Не вірний SQL запит на вставку товару");
+			e.printStackTrace();
+		}
+	}
+
 	public void removeItem(int type, int id) {
 		/*
-		 * Параметр type: 1 - видалення групи товарів 2 - видалення товару
+		 * Параметр type: 1 - видалення групи товарів 2 - видалення товару 3 - видалення
+		 * марки машини
 		 */
 		try {
 			PreparedStatement statement = null;
@@ -171,7 +271,7 @@ public class SQL_operator {
 				ResultSet res = st.executeQuery("SELECT * FROM items");
 
 				while (res.next()) {
-					statement = con.prepareStatement("DELETE FROM items WHERE ID=?");
+					statement = con.prepareStatement("DELETE FROM items WHERE groupID=?");
 					statement.setInt(1, id);
 					result = statement.executeUpdate();
 				}
@@ -180,8 +280,64 @@ public class SQL_operator {
 
 				break;
 
-			case 2:
+			case 2:// видалення інструментів
 				statement = con.prepareStatement("DELETE FROM items WHERE ID=?");
+				statement.setInt(1, id);
+				result = statement.executeUpdate();
+
+				break;
+
+			case 3: // видалення марки машини
+				statement = con.prepareStatement("DELETE FROM makes WHERE makeID=?");
+				statement.setInt(1, id);
+				result = statement.executeUpdate();
+
+				Statement stModels = con.createStatement();
+				ResultSet resModels = stModels.executeQuery("SELECT * FROM models");
+
+				while (resModels.next()) {
+					statement = con.prepareStatement("DELETE FROM models WHERE makeID=?");
+					statement.setInt(1, id);
+					result = statement.executeUpdate();
+				}
+				stModels.close();
+				resModels.close();
+
+				Statement stPartsByMake = con.createStatement();
+				ResultSet resPartsByMake = stPartsByMake.executeQuery("SELECT * FROM parts");
+
+				while (resPartsByMake.next()) {
+					statement = con.prepareStatement("DELETE FROM parts WHERE makeID=?");
+					statement.setInt(1, id);
+					result = statement.executeUpdate();
+				}
+
+				stPartsByMake.close();
+				resPartsByMake.close();
+
+				break;
+
+			case 4: // видалення моделі машини
+				statement = con.prepareStatement("DELETE FROM models WHERE modelID=?");
+				statement.setInt(1, id);
+				result = statement.executeUpdate();
+
+				Statement stPartsByModel = con.createStatement();
+				ResultSet resPartsByModel = stPartsByModel.executeQuery("SELECT * FROM parts");
+
+				while (resPartsByModel.next()) {
+					statement = con.prepareStatement("DELETE FROM parts WHERE modelID=?");
+					statement.setInt(1, id);
+					result = statement.executeUpdate();
+				}
+
+				stPartsByModel.close();
+				resPartsByModel.close();
+
+				break;
+
+			case 5: // видалення запчастин
+				statement = con.prepareStatement("DELETE FROM parts WHERE partID=?");
 				statement.setInt(1, id);
 				result = statement.executeUpdate();
 
@@ -210,7 +366,7 @@ public class SQL_operator {
 		}
 	}
 
-	public void updateGoods(Instrument g) {
+	public void updateInstrument(Instrument g) {
 		try {
 			Statement st = con.createStatement();
 			st.execute("update 'goods' set groupID='" + g.getGroupID() + "', name='" + g.getName() + "', description='"
@@ -222,6 +378,44 @@ public class SQL_operator {
 			System.out.println("Не вірний SQL запит на оновлення інформації про товар");
 			e.printStackTrace();
 		}
+	}
+
+	public void updateMake(int makeID, String makeName) {
+		try {
+			Statement st = con.createStatement();
+			st.execute("update 'makes' set makeName='" + makeName + "' where makeID= " + makeID + ";");
+		} catch (SQLException e) {
+			System.out.println("Не вірний SQL запит на оновлення інформації про групу товарів");
+			e.printStackTrace();
+		}
+	}
+
+	public void updateModel(AutomotiveParts_Model model) {
+		try {
+			Statement st = con.createStatement();
+			st.execute("update 'models' set makeID='" + model.getMakeID() + "', modelName='" + model.getModelName()
+					+ "' where modelID =" + model.getModelID() + ";");
+
+		} catch (SQLException e) {
+			System.out.println("Не вірний SQL запит на оновлення інформації про товар");
+			e.printStackTrace();
+		}
+	}
+
+	public void updatePart(AutomotiveParts_Part part) {
+		try {
+			Statement st = con.createStatement();
+			st.execute("update 'parts' set makeID='" + part.getMakeID() + "', modelID='" + part.getModelID()
+					+ "', partName='" + part.getPartName() + "', catlogID='" + part.getCatlogID() + "', description='"
+					+ part.getDescription() + "', side='" + part.getSide() + "', maker='" + part.getMaker()
+					+ "', quantity='" + part.getQuantity() + "', storagePlace='" + part.getStoragePlace()
+					+ "', itemImage='" + part.getPartImage() + "' where partID = " + part.getPartID() + ";");
+
+		} catch (SQLException e) {
+			System.out.println("Не вірний SQL запит на оновлення інформації про товар");
+			e.printStackTrace();
+		}
+
 	}
 
 	public void closeConnection() {

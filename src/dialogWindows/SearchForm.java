@@ -29,7 +29,8 @@ public class SearchForm extends JDialog {
 	public SearchForm(Frame parent) {
 		super(parent, true);
 		setTitle("Search");
-		setLocation(parent.getWidth() - getWidth() / 2, 200);
+		setLocation(Main.mainWindow.windowWidth - this.getWidth() / 2,
+				Main.mainWindow.windowHeight - this.getHeight() / 2);
 		setSize(350, 150);
 		setResizable(false);
 		getContentPane().setLayout(new GridLayout(3, 1, 0, 0));

@@ -40,7 +40,8 @@ public class SearchResult extends JDialog {
 
 		setTitle("Search Result");
 		setSize(660, 305);
-		setLocation(parent.getWidth() - getWidth() / 2, 200);
+		setLocation(Main.mainWindow.windowWidth - this.getWidth() / 2,
+				Main.mainWindow.windowHeight - this.getHeight() / 2);
 		setResizable(true);
 		SpringLayout springLayout = new SpringLayout();
 		getContentPane().setLayout(springLayout);

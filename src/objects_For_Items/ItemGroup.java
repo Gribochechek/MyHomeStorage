@@ -1,6 +1,8 @@
 package objects_For_Items;
 
-public class ItemGroup {
+import java.io.Serializable;
+
+public class ItemGroup  implements Serializable {
 	
 	private static int uniqueID = 1;
 	

@@ -18,6 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import input_output.InstrumentListWriter;
+import input_output.ListWriter;
 import main.Main;
 import objects_For_Items.Instrument;
 
@@ -42,7 +43,6 @@ public class ItemEditWindow extends JDialog {
 
 	private Instrument editingItem;
 
-	InstrumentListWriter ilw = new InstrumentListWriter();
 	private int indexOfTempGoodInList;
 	private String old_item_name;
 	private JButton btnShowPic;
@@ -60,7 +60,8 @@ public class ItemEditWindow extends JDialog {
 			}
 		}
 
-		setLocation(parent.getWidth() - getWidth() / 2, 200);
+		setLocation(Main.mainWindow.windowWidth - this.getWidth() / 2,
+				Main.mainWindow.windowHeight - this.getHeight() / 2);
 		setSize(370, 400);
 		setResizable(false);
 
@@ -117,27 +118,26 @@ public class ItemEditWindow extends JDialog {
 
 			}
 		});
-		
+
 		btnShowPic = new JButton("Show Pic");
 		btnShowPic.setBounds(48, 281, 97, 25);
 		getContentPane().add(btnShowPic);
 		btnShowPic.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Desktop desktop = null;
 				if (Desktop.isDesktopSupported()) {
-				    desktop = Desktop.getDesktop();
+					desktop = Desktop.getDesktop();
 				}
 				try {
-				    desktop.open(editingItem.getItemImage());
-				} catch (NullPointerException  | IOException ioe) {
-				    JOptionPane.showMessageDialog(null, "There is no Image attached!");
+					desktop.open(editingItem.getItemImage());
+				} catch (NullPointerException | IOException ioe) {
+					JOptionPane.showMessageDialog(null, "There is no Image attached!");
 				}
-				
+
 			}
 		});
-		
 
 		lblGroup = new JLabel("Group");
 		lblGroup.setHorizontalAlignment(SwingConstants.LEFT);
@@ -246,13 +246,15 @@ public class ItemEditWindow extends JDialog {
 
 		editingItem = new Instrument(editingItem.getInstrumentID(), newGroupId, tf_Name.getText().trim(),
 				tf_Desc.getText().trim(), tf_Maker.getText().trim(), tf_Unit.getText().trim(),
-				Double.parseDouble(tf_Quantity.getText().trim()), tf_StoragePlace.getText().trim(), editingItem.getItemImage());
+				Double.parseDouble(tf_Quantity.getText().trim()), tf_StoragePlace.getText().trim(),
+				editingItem.getItemImage());
 		Main.mainWindow.items.remove(indexOfTempGoodInList);
 		Main.mainWindow.items.add(indexOfTempGoodInList, editingItem);
-		
-		Main.mainWindow.sql.updateGoods(editingItem);
 
-		ilw.saveGoodsInFile(Main.mainWindow.items);
+		Main.mainWindow.sql.updateInstrument(editingItem);
+		ListWriter lw = new ListWriter();
+		lw.saveListInFile(Main.mainWindow.items, Main.instrumentsdat);
+
 		Main.mainWindow.itemsTable.updateUI();
 
 	}

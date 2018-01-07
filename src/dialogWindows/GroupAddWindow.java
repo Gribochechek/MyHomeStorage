@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import input_output.GroupListWriter;
+import input_output.ListWriter;
 import main.Main;
 import objects_For_Items.ItemGroup;
 
@@ -25,13 +26,14 @@ public class GroupAddWindow extends JDialog {
 	private JButton btn_cancel;
 
 	private eHandler buttonHandler = new eHandler();
-	GroupListWriter gw = new GroupListWriter();
+	ListWriter glw = new ListWriter();
 
 	public GroupAddWindow() {
 		setResizable(false);
 
 		setSize(340, 180);
-		setLocation(Main.mainWindow.getWidth() - getWidth() / 2, 200);
+		setLocation(Main.mainWindow.windowWidth - this.getWidth() / 2,
+				Main.mainWindow.windowHeight - this.getHeight() / 2);
 
 		setTitle("Adding new group of items");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -100,7 +102,7 @@ public class GroupAddWindow extends JDialog {
 
 		Main.mainWindow.groupsList.add(group);
 		Main.mainWindow.sql.addGroup(group);
-		gw.saveGroupsInFile(Main.mainWindow.groupsList);
+		glw.saveListInFile(Main.mainWindow.groupsList, Main.groupListdat);
 		Main.mainWindow.refreshComboBoxes();
 
 	}

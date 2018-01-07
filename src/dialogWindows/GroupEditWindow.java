@@ -17,6 +17,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import input_output.GroupListWriter;
+import input_output.ListWriter;
 import main.Main;
 import objects_For_Items.ItemGroup;
 
@@ -30,14 +31,14 @@ public class GroupEditWindow extends JFrame {
 	String oldGroupName;
 	int indexOfTempGroopInArrayList = 0;
 	ItemGroup tempGroup;
-	public GroupListWriter gw = new GroupListWriter();
 
 	Listener groupEditWindowListener = new Listener();
 
 	public GroupEditWindow() {
 
 		setSize(420, 188);
-		setLocation(Main.mainWindow.getWidth() - getWidth() / 2, 200);
+		setLocation(Main.mainWindow.windowWidth - this.getWidth() / 2,
+				Main.mainWindow.windowHeight - this.getHeight() / 2);
 		setTitle("EditingGroup");
 		getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
 
@@ -87,7 +88,8 @@ public class GroupEditWindow extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 
 			if (e.getSource() == comboBox_GroupChooser) {
-				GroupNameTextField.setText(Main.mainWindow.groupsList.get(comboBox_GroupChooser.getSelectedIndex()).getGroupName());
+				GroupNameTextField.setText(
+						Main.mainWindow.groupsList.get(comboBox_GroupChooser.getSelectedIndex()).getGroupName());
 				oldGroupName = GroupNameTextField.getText().toLowerCase();
 				indexOfTempGroopInArrayList = comboBox_GroupChooser.getSelectedIndex();
 
@@ -119,7 +121,9 @@ public class GroupEditWindow extends JFrame {
 					GroupNameTextField.getText());
 			Main.mainWindow.groupsList.remove(indexOfTempGroopInArrayList);
 			Main.mainWindow.groupsList.add(indexOfTempGroopInArrayList, tempGroup);
-			gw.saveGroupsInFile(Main.mainWindow.groupsList);
+			ListWriter lw = new ListWriter();
+			lw.saveListInFile(Main.mainWindow.groupsList, Main.groupListdat);
+
 			Main.mainWindow.sql.updateGroup(tempGroup.getGroupID(), tempGroup.getGroupName());
 		}
 

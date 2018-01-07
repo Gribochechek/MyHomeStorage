@@ -15,6 +15,7 @@ public class ListenerForRadioButton implements ActionListener {
 
 		if (Main.mainWindow.rdbtnShowAllItems.isSelected()) {
 			Main.mainWindow.itemsTable.setModel(Main.mainWindow.itemModel);
+			Main.mainWindow.itemsTable.updateUI();
 
 		}
 
@@ -33,8 +34,17 @@ public class ListenerForRadioButton implements ActionListener {
 				TableModelInstruments tempGoodsModel = new TableModelInstruments(tempGoods);
 				Main.mainWindow.itemsTable.setModel(tempGoodsModel);
 				Main.mainWindow.itemsTable.updateUI();
+
 			}
 		}
+		
+		
+		if(Main.mainWindow.rdbtnAllParts.isSelected()) {
+			Main.mainWindow.automotivePartsTable.setModel(Main.mainWindow.automotivePartsTableModel);
+			Main.mainWindow.itemsTable.updateUI();
+		}
+		
+		
 
 	}
 

@@ -10,6 +10,7 @@ import objects_For_Items.Instrument;
 
 public class InstrumentListReader {
 
+	@SuppressWarnings("unchecked")
 	public ArrayList<Instrument> getProductsList() throws IOException {
 		
 		ArrayList<Instrument> items= new ArrayList<>();

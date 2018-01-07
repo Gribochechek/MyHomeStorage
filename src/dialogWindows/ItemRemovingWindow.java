@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import input_output.InstrumentListWriter;
+import input_output.ListWriter;
 import main.Main;
 import objects_For_Items.Instrument;
 
@@ -29,7 +30,8 @@ public class ItemRemovingWindow extends JDialog {
 				indexOfTempGoodInList = i;
 			}
 		}
-		setLocation(parent.getWidth() - getWidth() / 2, 200);
+		setLocation(Main.mainWindow.windowWidth - this.getWidth() / 2,
+				Main.mainWindow.windowHeight - this.getHeight() / 2);
 		setSize(450, 185);
 		setResizable(false);
 
@@ -50,7 +52,7 @@ public class ItemRemovingWindow extends JDialog {
 		JPanel buttonPanel = new JPanel();
 		getContentPane().add(buttonPanel);
 
-		JButton btnOk = new JButton("OK");
+		JButton btnOk = new JButton("YES");
 		buttonPanel.add(btnOk);
 		btnOk.addActionListener(new ActionListener() {
 
@@ -61,12 +63,18 @@ public class ItemRemovingWindow extends JDialog {
 				for (int i = 0; i < Main.mainWindow.items.size(); i++) {
 					tempID = Main.mainWindow.items.get(i).getInstrumentID();
 					if (tempID == id) {
+
+						if (Main.mainWindow.items.get(i).getItemImage().exists()) {
+							Main.mainWindow.items.get(i).getItemImage().delete();
+						}
 						Main.mainWindow.items.remove(Main.mainWindow.items.get(i));
+
 					}
 				}
 
-				InstrumentListWriter ilw = new InstrumentListWriter();
-				ilw.saveGoodsInFile(Main.mainWindow.items);
+				ListWriter lw = new ListWriter();
+				lw.saveListInFile(Main.mainWindow.items, Main.instrumentsdat);
+
 				Main.mainWindow.sql.removeItem(2, tempID);
 
 				dispose();

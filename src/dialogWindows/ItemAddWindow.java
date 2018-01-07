@@ -22,6 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import input_output.InstrumentListWriter;
+import input_output.ListWriter;
 import main.Main;
 import objects_For_Items.Instrument;
 
@@ -51,8 +52,9 @@ public class ItemAddWindow extends JDialog {
 	private Instrument item;
 	File itemImage;
 	File itemImageSaving;
+	File noImage = new File(Main.imageSaveFolder + "/NoImageAvailable.jpg");
 
-	InstrumentListWriter ilr = new InstrumentListWriter();
+	
 
 	public ItemAddWindow(Frame parent) {
 
@@ -61,7 +63,8 @@ public class ItemAddWindow extends JDialog {
 		setTitle("Adding item");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-		setLocation(parent.getWidth() - getWidth() / 2, 200);
+		setLocation(Main.mainWindow.windowWidth - this.getWidth() / 2,
+				Main.mainWindow.windowHeight - this.getHeight() / 2);
 		setSize(370, 400);
 		setResizable(false);
 
@@ -180,8 +183,6 @@ public class ItemAddWindow extends JDialog {
 
 	public class eHandler implements ActionListener {
 
-		
-
 		public void actionPerformed(ActionEvent e) {
 
 			if (e.getSource() == btnOk) {
@@ -213,12 +214,15 @@ public class ItemAddWindow extends JDialog {
 
 			if (e.getSource() == btnAddImage) {
 				JFileChooser fileopen = new JFileChooser();
+				ImagePreviewForFileChooser preview = new ImagePreviewForFileChooser();
+				fileopen.setAccessory(preview);
+				fileopen.addPropertyChangeListener(preview);
 				int ret = fileopen.showDialog(null, "Открыть файл");
 				if (ret == JFileChooser.APPROVE_OPTION) {
 					itemImage = fileopen.getSelectedFile();
 					try {
 						BufferedImage input = ImageIO.read(itemImage);
-						itemImageSaving = new File(Main.imageSaveFolder +"/"+tf_Name.getText().trim() + ".jpg");
+						itemImageSaving = new File(Main.imageSaveFolder + "/" + tf_Name.getText().trim() + ".jpg");
 						ImageIO.write(input, "JPG", itemImageSaving);
 
 					} catch (IOException e1) {
@@ -234,17 +238,16 @@ public class ItemAddWindow extends JDialog {
 				 * DefaultComboBoxModel(string)); }
 				 */
 			}
-			
-			
-			if(e.getSource()==btnShowPic) {
+
+			if (e.getSource() == btnShowPic) {
 				Desktop desktop = null;
 				if (Desktop.isDesktopSupported()) {
-				    desktop = Desktop.getDesktop();
+					desktop = Desktop.getDesktop();
 				}
 				try {
-				    desktop.open(itemImageSaving);
+					desktop.open(itemImageSaving);
 				} catch (IOException ioe) {
-				    ioe.printStackTrace();
+					ioe.printStackTrace();
 				}
 			}
 
@@ -276,14 +279,29 @@ public class ItemAddWindow extends JDialog {
 			String quantity = tf_Quantity.getText().trim();
 
 			int groupID = Main.mainWindow.groupsList.get(comboBoxGroup.getSelectedIndex()).getGroupID();
+			if (itemImageSaving == null) {
+				try {
+					BufferedImage input = ImageIO.read(noImage);
+					itemImageSaving = new File(Main.imageSaveFolder + "/" + tf_Name.getText().trim() + ".jpg");
+					ImageIO.write(input, "JPG", itemImageSaving);
+
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
 
 			item = new Instrument(idOfNewProduct, groupID, tf_Name.getText().trim(), tf_Desc.getText().trim(),
 					tf_Maker.getText().trim(), tf_Unit.getText().trim(), Double.parseDouble(quantity),
 					tf_StoragePlace.getText().trim(), itemImageSaving);
 
 			Main.mainWindow.items.add(item);
-			ilr.saveGoodsInFile(Main.mainWindow.items);
-			Main.mainWindow.sql.addGoods(item);
+			ListWriter lw = new ListWriter();
+			lw.saveListInFile(Main.mainWindow.items, Main.instrumentsdat);
+			
+			
+			Main.mainWindow.sql.addInstrument(item);
 
 		}
 	}
